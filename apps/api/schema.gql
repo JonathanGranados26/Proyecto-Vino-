@@ -1,0 +1,97 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AuthResponse {
+  access_token: String!
+  email: String!
+  role: String!
+}
+
+input CreateProductInput {
+  alcoholicDegree: Float!
+  brand: String!
+  category: String!
+  country: String
+  currency: String!
+  description: String
+  imageUrl: String
+  images: [String!]
+  name: String!
+  presentation: String!
+  price: Float!
+  region: String
+  stock: Float!
+  tastingNotes: [String!]
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  createProduct(input: CreateProductInput!): ProductType!
+  deleteProduct(id: String!): ProductType!
+  login(input: LoginInput!): AuthResponse!
+  permanentlyDeleteProduct(id: String!): Boolean!
+  updateProduct(input: UpdateProductInput!): ProductType!
+}
+
+type ProductType {
+  alcoholicDegree: Float!
+  brand: String!
+  category: String!
+  country: String
+  createdAt: DateTime!
+  currency: String!
+  description: String
+  grape: String
+  id: ID!
+  imageUrl: String
+  images: [String!]
+  isActive: Boolean!
+  name: String!
+  pairing: String
+  presentation: String!
+  price: Float!
+  region: String
+  score: Float
+  slug: String!
+  stock: Int!
+  tastingNotes: [String!]
+  updatedAt: DateTime!
+  vintage: Int
+}
+
+type Query {
+  product(id: String!): ProductType
+  productBySlug(slug: String!): ProductType
+  products: [ProductType!]!
+  productsByCategory(category: String!): [ProductType!]!
+  relatedProducts(category: String!, excludeId: String!, limit: Float! = 4): [ProductType!]!
+}
+
+input UpdateProductInput {
+  alcoholicDegree: Float
+  brand: String
+  category: String
+  country: String
+  currency: String
+  description: String
+  id: ID!
+  imageUrl: String
+  images: [String!]
+  isActive: Boolean
+  name: String
+  presentation: String
+  price: Float
+  region: String
+  stock: Float
+  tastingNotes: [String!]
+}

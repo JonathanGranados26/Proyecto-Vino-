@@ -1,0 +1,29 @@
+{
+  "name": "gws-wine-platform",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "db:generate": "turbo run db:generate --filter=@gws/database",
+    "db:push": "turbo run db:push --filter=@gws/database",
+    "db:seed": "turbo run db:seed --filter=@gws/database",
+    "db:studio": "turbo run db:studio --filter=@gws/database",
+    "db:update-images": "turbo run db:update-images --filter=@gws/database",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "eslint": "^9.9.0",
+    "prettier": "^3.3.3",
+    "turbo": "^2.1.0",
+    "typescript": "^7.0.2"
+  },
+  "packageManager": "pnpm@9.7.0",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

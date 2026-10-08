@@ -1,0 +1,35 @@
+{
+  "name": "@gws/database",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:update-images": "tsx prisma/update-images.ts",
+    "db:fix-images": "tsx prisma/fix-images.ts",
+    "db:fix-all-images": "tsx prisma/fix-all-images.ts",
+    "db:emergency-fix": "tsx prisma/emergency-fix.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "clean": "rm -rf .turbo node_modules"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0"
+  },
+  "devDependencies": {
+    "@gws/config": "workspace:*",
+    "@types/node": "^22.5.0",
+    "prisma": "^5.22.0",
+    "tsx": "^4.17.0",
+    "typescript": "^5.5.4"
+  }
+}
