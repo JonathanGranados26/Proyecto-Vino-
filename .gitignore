@@ -78,4 +78,5 @@ Thumbs.db
 packages/database/prisma/migrations/
 
 # Testing
-coverage/
+coverage/apps/web/.env.local
+apps/admin/.env
