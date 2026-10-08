@@ -3,7 +3,7 @@
 import { ApolloClient, InMemoryCache, HttpLink, ApolloLink } from '@apollo/client';
 
 const httpLink = new HttpLink({
-  uri: 'https://pci-weights-tommy-ashley.trycloudflare.com/graphql', // ← TU URL DE API
+  uri: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/graphql',
   credentials: 'include',
 });
 

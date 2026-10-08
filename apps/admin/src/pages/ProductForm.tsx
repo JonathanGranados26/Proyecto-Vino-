@@ -3,6 +3,9 @@ import { useMutation, useQuery, gql } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import Layout from '../components/Layout';
 
+// 👇 URL de la API (cambiar según entorno)
+const API_URL = import.meta.env.VITE_API_REST_URL || 'http://localhost:4000';
+
 const CREATE_PRODUCT = gql`
   mutation CreateProduct($input: CreateProductInput!) {
     createProduct(input: $input) { id name }
@@ -25,9 +28,6 @@ const GET_PRODUCT = gql`
 `;
 
 const CATEGORIES = ['WHISKY', 'RON', 'TEQUILA', 'VINO', 'VODKA', 'GIN', 'LICOR', 'CERVEZA'];
-
-// URL de la API (cambiar según entorno)
-const API_URL = import.meta.env.VITE_API_REST_URL || 'http://localhost:4000';
 
 export default function ProductForm() {
   const { id } = useParams();
@@ -98,6 +98,7 @@ export default function ProductForm() {
         const formData = new FormData();
         formData.append('file', file);
 
+        // 👇 AQUÍ SE USA LA VARIABLE DE ENTORNO
         const response = await fetch(`${API_URL}/upload/image`, {
           method: 'POST',
           headers: { Authorization: `Bearer ${token}` },
@@ -188,14 +189,12 @@ export default function ProductForm() {
         <div className="border-b pb-4 md:pb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Galería de Imágenes</h2>
 
-          {/* Grid de imágenes existentes */}
           {form.images.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-4">
               {form.images.map((img, index) => (
                 <div key={index} className="relative group aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-200">
                   <img src={img} alt={`Imagen ${index + 1}`} className="w-full h-full object-cover" />
-
-                  {/* Overlay con acciones */}
+                  
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 flex-wrap p-2">
                     <button
                       type="button"
@@ -215,7 +214,6 @@ export default function ProductForm() {
                     </button>
                   </div>
 
-                  {/* Badge si es imagen principal */}
                   {form.imageUrl === img && (
                     <div className="absolute top-2 left-2 bg-gold-500 text-wine-950 px-2 py-1 rounded text-xs font-bold">
                       ⭐ Principal
@@ -226,7 +224,6 @@ export default function ProductForm() {
             </div>
           )}
 
-          {/* Botón de subir */}
           <input
             ref={fileInputRef}
             type="file"
@@ -364,7 +361,6 @@ export default function ProductForm() {
           </div>
         </div>
 
-        {/* Botones de acción */}
         <div className="flex flex-col md:flex-row gap-3 pt-4 border-t">
           <button
             type="submit"
