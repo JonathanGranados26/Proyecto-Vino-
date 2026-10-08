@@ -254,6 +254,9 @@ importers:
       '@prisma/client':
         specifier: ^5.22.0
         version: 5.22.0(prisma@5.22.0)
+      prisma:
+        specifier: ^5.22.0
+        version: 5.22.0
     devDependencies:
       '@gws/config':
         specifier: workspace:*
@@ -261,9 +264,6 @@ importers:
       '@types/node':
         specifier: ^22.5.0
         version: 22.20.5
-      prisma:
-        specifier: ^5.22.0
-        version: 5.22.0
       tsx:
         specifier: ^4.17.0
         version: 4.23.15
