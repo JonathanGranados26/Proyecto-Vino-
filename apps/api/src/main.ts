@@ -10,15 +10,18 @@ async function bootstrap() {
     rawBody: true,
   });
   
-  // CORS para producción con túneles
+    // Configuración de CORS para permitir múltiples dominios
   app.enableCors({
     origin: [
-      'https://joyce-slides-grades-ears.trycloudflare.com',
-      'https://participants-resistance-engines-lane.trycloudflare.com',
       'http://localhost:3000',
       'http://localhost:3001',
+      'https://proyecto-vino-qdkn-six.vercel.app',
+      'https://proyecto-vino-qdkn-547q0w0uo-vendimia-del-corazon.vercel.app',
+      'https://proyecto-vino.onrender.com',
     ],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   const port = process.env.PORT || 4000;
