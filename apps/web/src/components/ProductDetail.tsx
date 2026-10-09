@@ -6,7 +6,30 @@ import Link from 'next/link';
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ContactModal from './ContactModal';
-import { Info, Wine, MapPin, Award, ChevronLeft, ChevronRight, X } from 'lucide-react';
+
+// ==========================================
+// FIX DEFINITIVO: Importar con alias y hacer 
+// casting de tipos para evitar el conflicto 
+// entre React 19 y lucide-react en Vercel
+// ==========================================
+import {
+  Info as _Info,
+  Wine as _Wine,
+  MapPin as _MapPin,
+  Award as _Award,
+  ChevronLeft as _ChevronLeft,
+  ChevronRight as _ChevronRight,
+  X as _X
+} from 'lucide-react';
+
+const Info = _Info as unknown as React.ComponentType<any>;
+const Wine = _Wine as unknown as React.ComponentType<any>;
+const MapPin = _MapPin as unknown as React.ComponentType<any>;
+const Award = _Award as unknown as React.ComponentType<any>;
+const ChevronLeft = _ChevronLeft as unknown as React.ComponentType<any>;
+const ChevronRight = _ChevronRight as unknown as React.ComponentType<any>;
+const X = _X as unknown as React.ComponentType<any>;
+// ==========================================
 
 // ============================================
 // QUERIES DE GRAPHQL
@@ -69,18 +92,18 @@ const NOTE_ICONS: Record<string, string> = {
   'especias': '🌶️',
   'chocolate': '🍫',
   'café': '☕',
-  'caramelo': '',
-  'miel': '',
+  'caramelo': '🍯',
+  'miel': '🍯',
   'tabaco': '🍂',
   'cuero': '👜',
   'ahumado': '💨',
   'herbal': '🌿',
   'mineral': '💎',
   'frutal': '🍇',
-  'terroso': '',
-  'vegetal': '',
-  'pimienta': '️',
-  'madera': '',
+  'terroso': '🟫',
+  'vegetal': '🥬',
+  'pimienta': '🌶️',
+  'madera': '🪵',
   'frutos secos': '🥜',
   'fruta madura': '🍑',
   'fruta fresca': '🍓',
@@ -197,12 +220,12 @@ export default function ProductDetail() {
 
   const whatsappUrl = `https://wa.me/50370087508?text=${whatsappMessage}`;
 
-    // Tabs de información
+  // Tabs de información (Usando los iconos ya casteados)
   const tabs: { key: TabKey; label: string; icon: React.ComponentType<any> }[] = [
-  { key: 'descripcion', label: 'Descripción', icon: Info as React.ComponentType<any> },
-  { key: 'notas', label: 'Notas de Cata', icon: Wine as React.ComponentType<any> },
-  { key: 'maridaje', label: 'Maridaje', icon: Award as React.ComponentType<any> },
-  { key: 'ficha', label: 'Ficha Técnica', icon: MapPin as React.ComponentType<any> },
+    { key: 'descripcion', label: 'Descripción', icon: Info },
+    { key: 'notas', label: 'Notas de Cata', icon: Wine },
+    { key: 'maridaje', label: 'Maridaje', icon: Award },
+    { key: 'ficha', label: 'Ficha Técnica', icon: MapPin },
   ];
 
   // Funciones de navegación de imágenes
@@ -403,7 +426,7 @@ export default function ProductDetail() {
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >
-              <span></span>
+              <span>💬</span>
               {isAvailable ? 'Consultar por WhatsApp' : 'Producto Agotado'}
             </a>
 
@@ -674,4 +697,3 @@ export default function ProductDetail() {
     </div>
   );
 }
-   // Force rebuild - 2026-10-10
