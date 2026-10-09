@@ -674,3 +674,4 @@ export default function ProductDetail() {
     </div>
   );
 }
+   // Force rebuild - 2026-10-10
