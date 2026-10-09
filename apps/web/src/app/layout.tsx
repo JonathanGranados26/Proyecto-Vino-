@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ApolloProvider } from '@/components/ApolloProvider';
 import Link from 'next/link';
 import { Playfair_Display, Inter } from 'next/font/google';
-import { BottomNav } from '@/components/BottomNav';
+import BottomNav from '@/components/BottomNav';
 import { SEO_CONFIG } from '@/lib/seo';
 import './globals.css';
 
