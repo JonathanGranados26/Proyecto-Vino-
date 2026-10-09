@@ -4,6 +4,16 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
 
+// ==========================================
+// FIX: Declaración de tipos para evitar 
+// conflicto entre React 19 y lucide-react
+// ==========================================
+const PhoneIcon = Phone as unknown as React.ElementType;
+const MailIcon = Mail as unknown as React.ElementType;
+const MapPinIcon = MapPin as unknown as React.ElementType;
+const ClockIcon = Clock as unknown as React.ElementType;
+const SendIcon = Send as unknown as React.ElementType;
+
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
@@ -65,7 +75,7 @@ export default function ContactPage() {
             <div className="space-y-6">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-wine-50 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Phone className="w-5 h-5 text-wine-700" />
+                  <PhoneIcon className="w-5 h-5 text-wine-700" />
                 </div>
                 <div>
                   <p className="text-sm text-gray-500 mb-1">Teléfono / WhatsApp</p>
@@ -77,7 +87,7 @@ export default function ContactPage() {
 
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-wine-50 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Mail className="w-5 h-5 text-wine-700" />
+                  <MailIcon className="w-5 h-5 text-wine-700" />
                 </div>
                 <div>
                   <p className="text-sm text-gray-500 mb-1">Correo electrónico</p>
@@ -89,7 +99,7 @@ export default function ContactPage() {
 
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-wine-50 rounded-full flex items-center justify-center flex-shrink-0">
-                  <MapPin className="w-5 h-5 text-wine-700" />
+                  <MapPinIcon className="w-5 h-5 text-wine-700" />
                 </div>
                 <div>
                   <p className="text-sm text-gray-500 mb-1">Ubicación</p>
@@ -99,7 +109,7 @@ export default function ContactPage() {
 
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-wine-50 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Clock className="w-5 h-5 text-wine-700" />
+                  <ClockIcon className="w-5 h-5 text-wine-700" />
                 </div>
                 <div>
                   <p className="text-sm text-gray-500 mb-1">Horario de atención</p>
@@ -206,7 +216,7 @@ export default function ContactPage() {
                 disabled={isSubmitting}
                 className="w-full py-4 bg-wine-700 text-white rounded-lg font-semibold hover:bg-wine-800 transition flex items-center justify-center gap-2 disabled:opacity-50"
               >
-                <Send className="w-5 h-5" />
+                <SendIcon className="w-5 h-5" />
                 {isSubmitting ? 'Preparando...' : 'Enviar Mensaje'}
               </button>
             </form>
