@@ -197,12 +197,12 @@ export default function ProductDetail() {
 
   const whatsappUrl = `https://wa.me/50370087508?text=${whatsappMessage}`;
 
-  // Tabs de información
-  const tabs: { key: TabKey; label: string; icon: React.ElementType }[] = [
-  { key: 'descripcion', label: 'Descripción', icon: Info },
-  { key: 'notas', label: 'Notas de Cata', icon: Wine },
-  { key: 'maridaje', label: 'Maridaje', icon: Award },
-  { key: 'ficha', label: 'Ficha Técnica', icon: MapPin },
+    // Tabs de información
+  const tabs: { key: TabKey; label: string; icon: React.ComponentType<any> }[] = [
+  { key: 'descripcion', label: 'Descripción', icon: Info as React.ComponentType<any> },
+  { key: 'notas', label: 'Notas de Cata', icon: Wine as React.ComponentType<any> },
+  { key: 'maridaje', label: 'Maridaje', icon: Award as React.ComponentType<any> },
+  { key: 'ficha', label: 'Ficha Técnica', icon: MapPin as React.ComponentType<any> },
   ];
 
   // Funciones de navegación de imágenes
