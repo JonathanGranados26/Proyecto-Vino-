@@ -183,7 +183,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: ^3.14.1
-        version: 3.14.1(@types/react@19.3.0)(graphql-ws@5.16.0(graphql@16.14.2))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(subscriptions-transport-ws@0.11.0(graphql@16.14.2))
+        version: 3.14.1(@types/react@18.3.12)(graphql-ws@5.16.0(graphql@16.14.2))(graphql@16.14.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(subscriptions-transport-ws@0.11.0(graphql@16.14.2))
       '@gws/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -192,38 +192,38 @@ importers:
         version: link:../../packages/ui
       framer-motion:
         specifier: ^14.0.0
-        version: 14.0.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        version: 14.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       graphql:
         specifier: ^16.14.2
         version: 16.14.2
       lucide-react:
         specifier: ^1.52.0
-        version: 1.52.0(@types/react@19.3.0)(react@19.3.0)
+        version: 1.52.0(@types/react@18.3.12)(react@18.3.1)
       next:
-        specifier: ^15.0.0
-        version: 15.5.27(@types/node@22.20.5)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        specifier: 15.5.27
+        version: 15.5.27(@types/node@22.20.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
-        specifier: ^19.0.0
-        version: 19.3.0
+        specifier: 18.3.1
+        version: 18.3.1
       react-dom:
-        specifier: ^19.0.0
-        version: 19.3.0(react@19.3.0)
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
       zustand:
         specifier: ^5.0.15
-        version: 5.0.15(@types/react@19.3.0)(react@19.3.0)
+        version: 5.0.15(@types/react@18.3.12)(react@18.3.1)
     devDependencies:
       '@gws/config':
         specifier: workspace:*
         version: link:../../packages/config
       '@types/node':
-        specifier: ^22.0.0
+        specifier: ^22.20.5
         version: 22.20.5
       '@types/react':
-        specifier: ^19.0.0
-        version: 19.3.0
+        specifier: 18.3.12
+        version: 18.3.12
       '@types/react-dom':
-        specifier: ^19.0.0
-        version: 19.3.0(@types/react@19.3.0)
+        specifier: 18.3.1
+        version: 18.3.1
       autoprefixer:
         specifier: ^10.6.1
         version: 10.6.1(postcss@8.5.29)
@@ -231,10 +231,10 @@ importers:
         specifier: ^8.5.29
         version: 8.5.29
       tailwindcss:
-        specifier: ^3.4.10
+        specifier: ^3.4.19
         version: 3.4.19(tsx@4.23.15)
       typescript:
-        specifier: ^5.5.0
+        specifier: ^5.9.3
         version: 5.9.3
 
   packages/config:
@@ -1681,6 +1681,9 @@ packages:
   '@types/range-parser@1.2.7':
     resolution: {integrity: sha512-hKormJbkJqzQGhziax5PItDUTMAM9uE2XXQmM37dyd4hVM+5aVl7oVxMVUiVQn2oCQFN/LKCZdvSM0pFRqbSmQ==}
 
+  '@types/react-dom@18.3.1':
+    resolution: {integrity: sha512-qW1Mfv8taImTthu4KoXgDfLuk4bydU6Q/TkADnDWWHwi4NX4BR+LWfTp2sVmTqRrsHvyDDTelgelxJ+SsejKKQ==}
+
   '@types/react-dom@18.3.7':
     resolution: {integrity: sha512-MEe3UeoENYVFXzoXEWsvcpg6ZvlrFNlOQ7EOsvhI3CfAXwzPfO8Qwuxd40nepsYKqyyVQnTdEfv68q91yLcKrQ==}
     peerDependencies:
@@ -1690,6 +1693,9 @@ packages:
     resolution: {integrity: sha512-ZI7bU42mZXXKHn/qNLEw2IrbiINU7X5+vfgdixBHkCNpYWXjKgfQ/P+uyGb5CjOLB9UcnTeg3rylQtV2hym44Q==}
     peerDependencies:
       '@types/react': ^19.3.0
+
+  '@types/react@18.3.12':
+    resolution: {integrity: sha512-D2wOSq/d6Agt28q7rSI3jhU7G6aiuzljDGZ2hTZHIkrTLUI+AF3WMeKkEZ9nN2fkBAlcktT6vcZjDFiIhMYEQw==}
 
   '@types/react@18.3.31':
     resolution: {integrity: sha512-vfEqpXTvwT91yhmwdfouStN2hSKwTvyRs8qpLfADyrq/kxDw0hZM7Wk9Ug1FELj8hIby+S/+kQCSRFF32nv2Qw==}
@@ -4245,6 +4251,30 @@ snapshots:
     dependencies:
       graphql: 16.14.2
 
+  '@apollo/client@3.14.1(@types/react@18.3.12)(graphql-ws@5.16.0(graphql@16.14.2))(graphql@16.14.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(subscriptions-transport-ws@0.11.0(graphql@16.14.2))':
+    dependencies:
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.14.2)
+      '@wry/caches': 1.0.1
+      '@wry/equality': 0.5.7
+      '@wry/trie': 0.5.0
+      graphql: 16.14.2
+      graphql-tag: 2.12.6(graphql@16.14.2)
+      hoist-non-react-statics: 3.3.2
+      optimism: 0.18.1
+      prop-types: 15.8.1
+      rehackt: 0.1.0(@types/react@18.3.12)(react@18.3.1)
+      symbol-observable: 4.0.0
+      ts-invariant: 0.10.3
+      tslib: 2.8.1
+      zen-observable-ts: 1.2.5
+    optionalDependencies:
+      graphql-ws: 5.16.0(graphql@16.14.2)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      subscriptions-transport-ws: 0.11.0(graphql@16.14.2)
+    transitivePeerDependencies:
+      - '@types/react'
+
   '@apollo/client@3.14.1(@types/react@18.3.31)(graphql-ws@5.16.0(graphql@16.14.2))(graphql@16.14.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(subscriptions-transport-ws@0.11.0(graphql@16.14.2))':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.14.2)
@@ -4265,30 +4295,6 @@ snapshots:
       graphql-ws: 5.16.0(graphql@16.14.2)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      subscriptions-transport-ws: 0.11.0(graphql@16.14.2)
-    transitivePeerDependencies:
-      - '@types/react'
-
-  '@apollo/client@3.14.1(@types/react@19.3.0)(graphql-ws@5.16.0(graphql@16.14.2))(graphql@16.14.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(subscriptions-transport-ws@0.11.0(graphql@16.14.2))':
-    dependencies:
-      '@graphql-typed-document-node/core': 3.2.0(graphql@16.14.2)
-      '@wry/caches': 1.0.1
-      '@wry/equality': 0.5.7
-      '@wry/trie': 0.5.0
-      graphql: 16.14.2
-      graphql-tag: 2.12.6(graphql@16.14.2)
-      hoist-non-react-statics: 3.3.2
-      optimism: 0.18.1
-      prop-types: 15.8.1
-      rehackt: 0.1.0(@types/react@19.3.0)(react@19.3.0)
-      symbol-observable: 4.0.0
-      ts-invariant: 0.10.3
-      tslib: 2.8.1
-      zen-observable-ts: 1.2.5
-    optionalDependencies:
-      graphql-ws: 5.16.0(graphql@16.14.2)
-      react: 19.3.0
-      react-dom: 19.3.0(react@19.3.0)
       subscriptions-transport-ws: 0.11.0(graphql@16.14.2)
     transitivePeerDependencies:
       - '@types/react'
@@ -5495,6 +5501,10 @@ snapshots:
 
   '@types/range-parser@1.2.7': {}
 
+  '@types/react-dom@18.3.1':
+    dependencies:
+      '@types/react': 18.3.12
+
   '@types/react-dom@18.3.7(@types/react@18.3.31)':
     dependencies:
       '@types/react': 18.3.31
@@ -5502,6 +5512,11 @@ snapshots:
   '@types/react-dom@19.3.0(@types/react@19.3.0)':
     dependencies:
       '@types/react': 19.3.0
+
+  '@types/react@18.3.12':
+    dependencies:
+      '@types/prop-types': 15.7.15
+      csstype: 3.2.3
 
   '@types/react@18.3.31':
     dependencies:
@@ -6602,14 +6617,14 @@ snapshots:
 
   fraction.js@5.3.4: {}
 
-  framer-motion@14.0.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
+  framer-motion@14.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       motion-dom: 14.0.0
       motion-utils: 14.0.0
       tslib: 2.8.1
     optionalDependencies:
-      react: 19.3.0
-      react-dom: 19.3.0(react@19.3.0)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   fresh@0.5.2: {}
 
@@ -7019,11 +7034,11 @@ snapshots:
 
   lru-cache@7.18.3: {}
 
-  lucide-react@1.52.0(@types/react@19.3.0)(react@19.3.0):
+  lucide-react@1.52.0(@types/react@18.3.12)(react@18.3.1):
     dependencies:
-      react: 19.3.0
+      react: 18.3.1
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 18.3.12
 
   lucide-react@1.53.0(@types/react@18.3.31)(react@18.3.1):
     dependencies:
@@ -7130,15 +7145,15 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  next@15.5.27(@types/node@22.20.5)(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
+  next@15.5.27(@types/node@22.20.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@next/env': 15.5.27
       '@swc/helpers': 0.5.15
       caniuse-lite: 1.0.30001814
       postcss: 8.4.31
-      react: 19.3.0
-      react-dom: 19.3.0(react@19.3.0)
-      styled-jsx: 5.1.6(react@19.3.0)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      styled-jsx: 5.1.6(react@18.3.1)
     optionalDependencies:
       '@next/swc-darwin-arm64': 15.5.27
       '@next/swc-darwin-x64': 15.5.27
@@ -7418,15 +7433,15 @@ snapshots:
 
   reflect-metadata@0.1.14: {}
 
+  rehackt@0.1.0(@types/react@18.3.12)(react@18.3.1):
+    optionalDependencies:
+      '@types/react': 18.3.12
+      react: 18.3.1
+
   rehackt@0.1.0(@types/react@18.3.31)(react@18.3.1):
     optionalDependencies:
       '@types/react': 18.3.31
       react: 18.3.1
-
-  rehackt@0.1.0(@types/react@19.3.0)(react@19.3.0):
-    optionalDependencies:
-      '@types/react': 19.3.0
-      react: 19.3.0
 
   repeat-string@1.6.1: {}
 
@@ -7688,10 +7703,10 @@ snapshots:
     dependencies:
       '@tokenizer/token': 0.3.0
 
-  styled-jsx@5.1.6(react@19.3.0):
+  styled-jsx@5.1.6(react@18.3.1):
     dependencies:
       client-only: 0.0.1
-      react: 19.3.0
+      react: 18.3.1
 
   subscriptions-transport-ws@0.11.0(graphql@16.14.2):
     dependencies:
@@ -8066,7 +8081,7 @@ snapshots:
 
   zen-observable@0.8.15: {}
 
-  zustand@5.0.15(@types/react@19.3.0)(react@19.3.0):
+  zustand@5.0.15(@types/react@18.3.12)(react@18.3.1):
     optionalDependencies:
-      '@types/react': 19.3.0
-      react: 19.3.0
+      '@types/react': 18.3.12
+      react: 18.3.1
