@@ -14,7 +14,7 @@ export class UploadController {
     FileInterceptor('file', {
       storage: memoryStorage(),
       limits: { fileSize: 5 * 1024 * 1024 },
-      fileFilter: (req, file, callback) => {
+      fileFilter: (_req, file, callback) => {
         const allowedMimes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
         if (!allowedMimes.includes(file.mimetype)) {
           return callback(new Error('Solo se permiten imágenes (JPG, PNG, WEBP, GIF)'), false);
