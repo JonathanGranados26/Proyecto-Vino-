@@ -3,10 +3,8 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  base: '/Proyecto-Vino-/', // ← Agregar esta línea
   server: {
-    allowedHosts: [
-      'participants-resistance-engines-lane.trycloudflare.com',
-      'localhost',
-    ],
+    port: 3001,
   },
 });
