@@ -10,18 +10,19 @@ async function bootstrap() {
     rawBody: true,
   });
   
-    // Configuración de CORS para permitir múltiples dominios
+  // Configuración de CORS para permitir múltiples dominios de producción y desarrollo
   app.enableCors({
     origin: [
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'https://proyecto-vino-qdkn-six.vercel.app',
-      'https://proyecto-vino-qdkn-547q0w0uo-vendimia-del-corazon.vercel.app',
-      'https://proyecto-vino.onrender.com',
+      'http://localhost:3000',       // Web local
+      'http://localhost:3001',       // Admin local
+      'https://proyecto-vino-qdkn-six.vercel.app', // Web en producción (Vercel)
+      'https://proyecto-vino-qdkn-547q0w0uo-vendimia-del-corazon.vercel.app', // Preview de Vercel
+      'https://jonathangranados26.github.io', // Admin en producción (GitHub Pages)
+      'https://proyecto-vino.onrender.com', // La propia API (por si hace peticiones internas)
     ],
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   });
 
   const port = process.env.PORT || 4000;
