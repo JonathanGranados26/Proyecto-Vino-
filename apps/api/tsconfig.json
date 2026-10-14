@@ -26,8 +26,7 @@
     "moduleResolution": "node",
     "rootDir": "./src",
     "types": ["node"],
-    "emitDeclarationOnly": false,
-    "ignoreDeprecations": "6.0"
+    "emitDeclarationOnly": false
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
