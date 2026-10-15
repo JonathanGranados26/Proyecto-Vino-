@@ -280,7 +280,7 @@ License: MIT
     }
   }
 `,KS=mt`
-  mutation DeleteProduct($id: ID!) {
+  mutation DeleteProduct($id: String!) {
     deleteProduct(id: $id) {
       id
       name
