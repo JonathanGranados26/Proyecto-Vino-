@@ -52,11 +52,13 @@ export class ProductsResolver {
     return this.productsService.update(id, data);
   }
 
-  @Mutation(() => ProductType)
-  @UseGuards(GqlAuthGuard)
-  async deleteProduct(@Args('id') id: string): Promise<ProductType> {
-    return this.productsService.remove(id);
-  }
+ @Mutation(() => ProductType)
+@UseGuards(GqlAuthGuard)
+async deleteProduct(
+  @Args('id', { type: () => String }) id: string,  // ← Importante: type: () => String
+): Promise<ProductType> {
+  return this.productsService.remove(id);
+}
 
   @Mutation(() => Boolean)
   @UseGuards(GqlAuthGuard)
