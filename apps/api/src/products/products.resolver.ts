@@ -36,14 +36,14 @@ export class ProductsResolver {
     return this.productsService.create(input);
   }
 
-@Query(() => [ProductType], { name: 'relatedProducts' })
-async findRelated(
-  @Args('category') category: string,
-  @Args('excludeId') excludeId: string,
-  @Args('limit', { defaultValue: 4 }) limit: number,
-): Promise<ProductType[]> {
-  return this.productsService.findRelated(category, excludeId, limit);
-}
+  @Query(() => [ProductType], { name: 'relatedProducts' })
+  async findRelated(
+    @Args('category') category: string,
+    @Args('excludeId') excludeId: string,
+    @Args('limit', { defaultValue: 4 }) limit: number,
+  ): Promise<ProductType[]> {
+    return this.productsService.findRelated(category, excludeId, limit);
+  }
 
   @Mutation(() => ProductType)
   @UseGuards(GqlAuthGuard)
@@ -63,5 +63,18 @@ async findRelated(
   async permanentlyDeleteProduct(@Args('id') id: string): Promise<boolean> {
     await this.productsService.delete(id);
     return true;
+  }
+
+  /**
+   * Mutación atómica para cambiar solo el estado activo/inactivo.
+   * Optimizada para Optimistic UI en el frontend.
+   */
+  @Mutation(() => ProductType, { name: 'updateProductStatus' })
+  @UseGuards(GqlAuthGuard)
+  async updateProductStatus(
+    @Args('id') id: string,
+    @Args('isActive') isActive: boolean,
+  ): Promise<ProductType> {
+    return this.productsService.updateStatus(id, isActive);
   }
 }

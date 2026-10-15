@@ -3,6 +3,7 @@ import { useQuery, useMutation, gql } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import ImportExportModal from '../components/ImportExportModal';
+import { StatusToggle } from '../components/StatusToggle';
 import { Plus, Upload, Search } from 'lucide-react';
 
 const GET_PRODUCTS = gql`
@@ -55,6 +56,10 @@ export default function Products() {
 
   const products = data?.products || [];
 
+  // CORRECCIÓN DEL ERROR 'unknown[]': Forzamos el tipo a string
+  const categories = Array.from(
+  new Set(products.map((p: any) => String(p.category)))
+).sort() as string[];
   const filtered = products.filter((p: any) => {
     const matchesSearch =
       p.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -66,8 +71,6 @@ export default function Products() {
       (statusFilter === 'inactive' && !p.isActive);
     return matchesSearch && matchesCategory && matchesStatus;
   });
-
-  const categories = [...new Set(products.map((p: any) => p.category))].sort();
 
   if (loading) {
     return (
@@ -145,7 +148,7 @@ export default function Products() {
           className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wine-500 focus:border-transparent text-sm md:text-base"
         >
           <option value="">Todas las categorías</option>
-          {categories.map((cat) => (
+          {categories.map((cat: string) => (
             <option key={cat} value={cat}>
               {cat}
             </option>
@@ -198,19 +201,6 @@ export default function Products() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                         </svg>
                         <p className="text-lg font-medium">No se encontraron productos</p>
-                        <p className="text-sm mt-1">
-                          {search || categoryFilter || statusFilter
-                            ? 'Intenta ajustar los filtros'
-                            : 'Crea tu primer producto'}
-                        </p>
-                        {!search && !categoryFilter && !statusFilter && (
-                          <Link
-                            to="/products/new"
-                            className="mt-4 px-4 py-2 bg-wine-700 text-white rounded-lg hover:bg-wine-800 transition"
-                          >
-                            Crear Producto
-                          </Link>
-                        )}
                       </div>
                     </td>
                   </tr>
@@ -221,15 +211,9 @@ export default function Products() {
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
                             {product.imageUrl ? (
-                              <img
-                                src={product.imageUrl}
-                                alt={product.name}
-                                className="w-full h-full object-cover"
-                              />
+                              <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
-                                Sin img
-                              </div>
+                              <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">Sin img</div>
                             )}
                           </div>
                           <div>
@@ -247,41 +231,22 @@ export default function Products() {
                         ${product.price.toLocaleString()}
                       </td>
                       <td className="px-4 md:px-6 py-4 text-sm md:text-base">
-                        <span
-                          className={
-                            product.stock < 10 ? 'text-red-600 font-medium' : 'text-gray-900'
-                          }
-                        >
+                        <span className={product.stock < 10 ? 'text-red-600 font-medium' : 'text-gray-900'}>
                           {product.stock}
-                          {product.stock < 10 && product.stock > 0 && (
-                            <span className="ml-1 text-xs">⚠️</span>
-                          )}
+                          {product.stock < 10 && product.stock > 0 && <span className="ml-1 text-xs">⚠️</span>}
                           {product.stock === 0 && <span className="ml-1 text-xs">❌</span>}
                         </span>
                       </td>
                       <td className="hidden md:table-cell px-6 py-4">
-                        <span
-                          className={`px-2 py-1 rounded text-xs font-medium ${
-                            product.isActive
-                              ? 'bg-green-100 text-green-700'
-                              : 'bg-gray-100 text-gray-600'
-                          }`}
-                        >
-                          {product.isActive ? 'Activo' : 'Inactivo'}
-                        </span>
+                        {/* AQUÍ ESTÁ EL COMPONENTE STATUS TOGGLE */}
+                        <StatusToggle productId={product.id} initialStatus={product.isActive} />
                       </td>
                       <td className="px-4 md:px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">
-                          <Link
-                            to={`/products/${product.id}/edit`}
-                            className="px-3 py-1 text-wine-600 hover:text-wine-800 hover:bg-wine-50 rounded transition text-sm font-medium"
-                          >
+                          <Link to={`/products/${product.id}/edit`} className="px-3 py-1 text-wine-600 hover:text-wine-800 hover:bg-wine-50 rounded transition text-sm font-medium">
                             Editor
                           </Link>
-                          <button
-                            onClick={() => handleDelete(product.id, product.name)}
-                            className="px-3 py-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded transition text-sm font-medium"
-                          >
+                          <button onClick={() => handleDelete(product.id, product.name)} className="px-3 py-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded transition text-sm font-medium">
                             Eliminar
                           </button>
                         </div>
@@ -298,16 +263,11 @@ export default function Products() {
       {/* Footer con contador */}
       <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-sm text-gray-600">
         <div>
-          Mostrando <strong>{filtered.length}</strong> de{' '}
-          <strong>{products.length}</strong> productos
+          Mostrando <strong>{filtered.length}</strong> de <strong>{products.length}</strong> productos
         </div>
         {(search || categoryFilter || statusFilter) && (
           <button
-            onClick={() => {
-              setSearch('');
-              setCategoryFilter('');
-              setStatusFilter('');
-            }}
+            onClick={() => { setSearch(''); setCategoryFilter(''); setStatusFilter(''); }}
             className="text-wine-700 hover:text-wine-800 font-medium"
           >
             Limpiar filtros
@@ -315,11 +275,7 @@ export default function Products() {
         )}
       </div>
 
-      {/* Modal de Importar/Exportar */}
-      <ImportExportModal
-        isOpen={isImportModalOpen}
-        onClose={() => setIsImportModalOpen(false)}
-      />
+      <ImportExportModal isOpen={isImportModalOpen} onClose={() => setIsImportModalOpen(false)} />
     </Layout>
   );
 }

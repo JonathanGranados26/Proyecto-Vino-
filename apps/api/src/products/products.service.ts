@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaClient, Product as PrismaProduct } from '@prisma/client';
 import { ProductType } from './dto/product.dto';
 
@@ -24,7 +24,7 @@ function mapProduct(product: PrismaProduct): ProductType {
     score: product.score || undefined,
     pairing: product.pairing || undefined,
     imageUrl: product.imageUrl || undefined,
-    images: product.images || [],  // ← NUEVO
+    images: product.images || [],
     tastingNotes: product.tastingNotes || [],
     isActive: product.isActive,
     createdAt: product.createdAt,
@@ -66,7 +66,7 @@ export class ProductsService {
     });
     return products.map(mapProduct);
   }
-    // Crear producto
+
   async create(data: any): Promise<any> {
     return prisma.product.create({
       data: {
@@ -81,7 +81,6 @@ export class ProductsService {
     });
   }
 
-  // Actualizar producto
   async update(id: string, data: any): Promise<any> {
     return prisma.product.update({
       where: { id },
@@ -89,20 +88,19 @@ export class ProductsService {
     });
   }
 
-async findRelated(category: string, excludeId: string, limit: number = 4): Promise<ProductType[]> {
-  const products = await prisma.product.findMany({
-    where: {
-      category,
-      isActive: true,
-      id: { not: excludeId },
-    },
-    take: limit,
-    orderBy: { name: 'asc' },
-  });
-  return products.map(mapProduct);
-}
+  async findRelated(category: string, excludeId: string, limit: number = 4): Promise<ProductType[]> {
+    const products = await prisma.product.findMany({
+      where: {
+        category,
+        isActive: true,
+        id: { not: excludeId },
+      },
+      take: limit,
+      orderBy: { name: 'asc' },
+    });
+    return products.map(mapProduct);
+  }
 
-  // Eliminar producto (soft delete)
   async remove(id: string): Promise<any> {
     return prisma.product.update({
       where: { id },
@@ -110,10 +108,29 @@ async findRelated(category: string, excludeId: string, limit: number = 4): Promi
     });
   }
 
-  // Eliminar permanentemente
   async delete(id: string): Promise<any> {
     return prisma.product.delete({
       where: { id },
     });
+  }
+
+  /**
+   * Actualiza solo el estado activo/inactivo de un producto.
+   * Operación atómica y optimizada para Optimistic UI.
+   */
+  async updateStatus(id: string, isActive: boolean): Promise<ProductType> {
+    try {
+      const updatedProduct = await prisma.product.update({
+        where: { id },
+        data: { isActive },
+      });
+      return mapProduct(updatedProduct);
+    } catch (error: any) {
+      // P2025 es el código de Prisma para "Record not found"
+      if (error?.code === 'P2025') {
+        throw new NotFoundException(`Producto con ID ${id} no encontrado`);
+      }
+      throw error;
+    }
   }
 }

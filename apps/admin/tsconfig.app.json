@@ -20,7 +20,8 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
-    "checkJs": false
+    "checkJs": false,
+    "types": ["vite/client", "node"] 
   },
   "include": ["src"]
 }

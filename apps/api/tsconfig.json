@@ -23,7 +23,7 @@
     "alwaysStrict": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node",
+    "moduleResolution":"node",
     "rootDir": "./src",
     "types": ["node"],
     "emitDeclarationOnly": false
