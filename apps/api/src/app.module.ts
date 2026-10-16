@@ -1,9 +1,6 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { CacheModule } from '@nestjs/cache-manager';
-import { redisStore } from 'cache-manager-redis-store';
-import { ThrottlerModule } from '@nestjs/throttler';
 import { join } from 'path';
 import { ProductsModule } from './products/products.module';
 import { AuthModule } from './auth/auth.module';
@@ -12,33 +9,33 @@ import { ProductsImportModule } from './products/products-import.module';
 
 @Module({
   imports: [
-    // Configuración de GraphQL
+    // Configuración de GraphQL con formato de errores personalizado
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'schema.gql'),
       sortSchema: true,
       playground: true,
-      // ❌ REMOVIDO: cors no es una propiedad de ApolloDriverConfig
-      // ✅ CORS se configura en main.ts con app.enableCors()
+      // Formato personalizado de errores para exponer validaciones de Zod
+      formatError: (error) => {
+        // Type assertion para acceder a las propiedades de extensions
+        const extensions = error.extensions as any;
+        
+        // Si el error tiene una respuesta detallada (de Zod), la exponemos
+        if (extensions?.exception?.response) {
+          const response = extensions.exception.response;
+          return {
+            message: response.message || error.message,
+            errors: response.errors || [],
+            extensions: {
+              code: extensions.code || 'BAD_REQUEST',
+            },
+          };
+        }
+        
+        // Si no tiene respuesta detallada, retornamos el error original
+        return error;
+      },
     }),
-
-    // Configuración de Cache con Redis
-    CacheModule.registerAsync({
-      isGlobal: true,
-      useFactory: () => ({
-        store: redisStore,
-        host: process.env.REDIS_HOST || 'localhost',
-        port: parseInt(process.env.REDIS_PORT || '6379', 10),
-        ttl: 300,
-        max: 100,
-      }),
-    }),
-
-    // Configuración de Rate Limiting - SIN guard global
-    ThrottlerModule.forRoot([{
-      ttl: 60000,
-      limit: 100,
-    }]),
 
     // Módulos de la aplicación
     AuthModule,
