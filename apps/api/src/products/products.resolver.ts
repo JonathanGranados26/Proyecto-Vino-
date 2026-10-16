@@ -1,12 +1,10 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
-import { UseGuards, UsePipes } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { ProductType } from './dto/product.dto';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
-import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
-import { CreateProductSchema } from './dto/create-product.schema';
 
 @Resolver(() => ProductType)
 export class ProductsResolver {
@@ -34,10 +32,7 @@ export class ProductsResolver {
 
   @Mutation(() => ProductType)
   @UseGuards(GqlAuthGuard)
-  @UsePipes(new ZodValidationPipe(CreateProductSchema))
-  async createProduct(
-    @Args('input') input: CreateProductInput,
-  ): Promise<ProductType> {
+  async createProduct(@Args('input') input: CreateProductInput): Promise<ProductType> {
     return this.productsService.create(input);
   }
 

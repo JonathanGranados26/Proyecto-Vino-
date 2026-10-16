@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException, Inject } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Inject } from '@nestjs/common';
 import { PrismaClient, Product as PrismaProduct } from '@prisma/client';
 import { ProductType } from './dto/product.dto';
+import { CreateProductSchema } from './dto/create-product.schema';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 
@@ -36,26 +37,20 @@ function mapProduct(product: PrismaProduct): ProductType {
 
 @Injectable()
 export class ProductsService {
-  // ✅ CORRECCIÓN: Usar CACHE_MANAGER como token de inyección
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
   async findAll(): Promise<ProductType[]> {
     const cacheKey = 'products:all:active';
     const cached = await this.cacheManager.get<ProductType[]>(cacheKey);
-    if (cached) {
-      console.log('[Cache HIT] findAll');
-      return cached;
-    }
+    if (cached) return cached;
 
-    console.log('[Cache MISS] findAll - Querying DB');
     const products = await prisma.product.findMany({
       where: { isActive: true },
       orderBy: { name: 'asc' },
     });
 
     const mapped = products.map(mapProduct);
-    await this.cacheManager.set(cacheKey, mapped, 300); // 5 minutos
-    
+    await this.cacheManager.set(cacheKey, mapped, 300);
     return mapped;
   }
 
@@ -101,6 +96,20 @@ export class ProductsService {
   }
 
   async create(data: any): Promise<any> {
+    const validationResult = CreateProductSchema.safeParse(data);
+    
+    if (!validationResult.success) {
+      const errorMessages = validationResult.error.issues.map((err) => ({
+        field: err.path.join('.'),
+        message: err.message,
+      }));
+
+      throw new BadRequestException({
+        message: 'Error de validación',
+        errors: errorMessages,
+      });
+    }
+
     const baseSlug = data.name
       .toLowerCase()
       .normalize('NFD')
@@ -119,7 +128,10 @@ export class ProductsService {
     }
 
     const product = await prisma.product.create({
-      data: { ...data, slug },
+      data: {
+        ...validationResult.data,
+        slug,
+      },
     });
 
     await this.invalidateCache();
@@ -181,8 +193,6 @@ export class ProductsService {
   }
 
   private async invalidateCache(): Promise<void> {
-    // ✅ CORRECCIÓN: Usar .reset() o .del() según la versión de cache-manager
-    // En cache-manager v5/v6 es .reset(), en v7 es .clear()
     if (typeof (this.cacheManager as any).reset === 'function') {
       await (this.cacheManager as any).reset();
     } else {
