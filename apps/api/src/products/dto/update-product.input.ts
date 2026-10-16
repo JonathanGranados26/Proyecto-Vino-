@@ -1,33 +1,36 @@
 import { InputType, Field, Float, Int } from '@nestjs/graphql';
 
 @InputType()
-export class CreateProductInput {
-  @Field()
-  name: string;
+export class UpdateProductInput {
+  @Field(() => Int)
+  id: string;
 
-  @Field()
-  brand: string;
+  @Field({ nullable: true })
+  name?: string;
 
-  @Field()
-  category: string;
+  @Field({ nullable: true })
+  brand?: string;
+
+  @Field({ nullable: true })
+  category?: string;
 
   @Field({ nullable: true })
   description?: string;
 
-  @Field()
-  presentation: string;
+  @Field({ nullable: true })
+  presentation?: string;
 
-  @Field(() => Float)
-  alcoholicDegree: number;
+  @Field(() => Float, { nullable: true })
+  alcoholicDegree?: number;
 
-  @Field(() => Float)
-  price: number;
+  @Field(() => Float, { nullable: true })
+  price?: number;
 
-  @Field()
-  currency: string;
+  @Field({ nullable: true })
+  currency?: string;
 
-  @Field(() => Int)
-  stock: number;
+  @Field(() => Int, { nullable: true })
+  stock?: number;
 
   @Field({ nullable: true })
   country?: string;
@@ -55,4 +58,7 @@ export class CreateProductInput {
 
   @Field(() => [String], { nullable: true })
   tastingNotes?: string[];
+
+  @Field({ nullable: true })
+  isActive?: boolean;
 }

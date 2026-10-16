@@ -254,6 +254,6 @@ const errorMessages = validationResult.error.issues.map((err) => ({
 
   private async invalidateCache(): Promise<void> {
     console.log('[Cache] Invalidating all product caches');
-    await this.cacheManager.reset();
+await this.cacheManager.clear();
   }
 }
