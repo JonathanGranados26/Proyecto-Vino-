@@ -3,8 +3,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-store';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { join } from 'path';
 import { ProductsModule } from './products/products.module';
 import { AuthModule } from './auth/auth.module';
@@ -19,6 +18,10 @@ import { ProductsImportModule } from './products/products-import.module';
       autoSchemaFile: join(process.cwd(), 'schema.gql'),
       sortSchema: true,
       playground: true,
+      cors: {
+        origin: '*',
+        credentials: true,
+      },
     }),
 
     // Configuración de Cache con Redis
@@ -33,10 +36,10 @@ import { ProductsImportModule } from './products/products-import.module';
       }),
     }),
 
-    // Configuración de Rate Limiting
+    // Configuración de Rate Limiting - SIN guard global
     ThrottlerModule.forRoot([{
-      ttl: 60000, // 1 minuto
-      limit: 100, // 100 requests por minuto por IP
+      ttl: 60000,
+      limit: 100,
     }]),
 
     // Módulos de la aplicación
@@ -44,12 +47,6 @@ import { ProductsImportModule } from './products/products-import.module';
     ProductsModule,
     ProductsImportModule,
     UploadModule,
-  ],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard, // Aplica rate limiting globalmente
-    },
   ],
 })
 export class AppModule {}
