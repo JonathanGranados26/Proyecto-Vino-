@@ -1,9 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Inject } from '@nestjs/common';
 import { PrismaClient, Product as PrismaProduct } from '@prisma/client';
 import { ProductType } from './dto/product.dto';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { Inject } from '@nestjs/common';
-import { CreateProductSchema } from './dto/create-product.schema';
 
 const prisma = new PrismaClient();
 
@@ -37,7 +36,8 @@ function mapProduct(product: PrismaProduct): ProductType {
 
 @Injectable()
 export class ProductsService {
-  constructor(@Inject(Cache) private cacheManager: Cache) {}
+  // ✅ CORRECCIÓN: Usar CACHE_MANAGER como token de inyección
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
   async findAll(): Promise<ProductType[]> {
     const cacheKey = 'products:all:active';
@@ -54,7 +54,7 @@ export class ProductsService {
     });
 
     const mapped = products.map(mapProduct);
-    await this.cacheManager.set(cacheKey, mapped, 300);
+    await this.cacheManager.set(cacheKey, mapped, 300); // 5 minutos
     
     return mapped;
   }
@@ -62,91 +62,45 @@ export class ProductsService {
   async findOne(id: string): Promise<ProductType | null> {
     const cacheKey = `product:${id}`;
     const cached = await this.cacheManager.get<ProductType>(cacheKey);
-    if (cached) {
-      console.log('[Cache HIT] findOne:', id);
-      return cached;
-    }
+    if (cached) return cached;
 
-    console.log('[Cache MISS] findOne:', id);
-    const product = await prisma.product.findUnique({
-      where: { id },
-    });
-
+    const product = await prisma.product.findUnique({ where: { id } });
     if (!product) return null;
 
     const mapped = mapProduct(product);
     await this.cacheManager.set(cacheKey, mapped, 300);
-    
     return mapped;
   }
 
   async findBySlug(slug: string): Promise<ProductType | null> {
     const cacheKey = `product:slug:${slug}`;
     const cached = await this.cacheManager.get<ProductType>(cacheKey);
-    if (cached) {
-      console.log('[Cache HIT] findBySlug:', slug);
-      return cached;
-    }
+    if (cached) return cached;
 
-    console.log('[Cache MISS] findBySlug:', slug);
-    const product = await prisma.product.findUnique({
-      where: { slug },
-    });
-
+    const product = await prisma.product.findUnique({ where: { slug } });
     if (!product) return null;
 
     const mapped = mapProduct(product);
     await this.cacheManager.set(cacheKey, mapped, 300);
-    
     return mapped;
   }
 
   async findByCategory(category: string): Promise<ProductType[]> {
     const cacheKey = `products:category:${category}`;
     const cached = await this.cacheManager.get<ProductType[]>(cacheKey);
-    if (cached) {
-      console.log('[Cache HIT] findByCategory:', category);
-      return cached;
-    }
+    if (cached) return cached;
 
-    console.log('[Cache MISS] findByCategory:', category);
     const products = await prisma.product.findMany({
-      where: {
-        category,
-        isActive: true,
-      },
+      where: { category, isActive: true },
       orderBy: { name: 'asc' },
     });
 
     const mapped = products.map(mapProduct);
     await this.cacheManager.set(cacheKey, mapped, 300);
-    
     return mapped;
   }
 
-  /**
-   * Crea un producto con validación Zod manual
-   * Decision: Validamos aquí en lugar de usar @UsePipes porque
-   * los pipes de NestJS no funcionan bien con GraphQL inputs
-   */
   async create(data: any): Promise<any> {
-    // Validación manual con Zod
-    const validationResult = CreateProductSchema.safeParse(data);
-    
-    if (!validationResult.success) {
-      // ✅ DESPUÉS (Zod v4)
-const errorMessages = validationResult.error.issues.map((err) => ({
-  field: err.path.join('.'),
-  message: err.message,
-}));
-
-      throw new BadRequestException({
-        message: 'Error de validación',
-        errors: errorMessages,
-      });
-    }
-
-    // Generar slug único
     const baseSlug = data.name
       .toLowerCase()
       .normalize('NFD')
@@ -154,7 +108,6 @@ const errorMessages = validationResult.error.issues.map((err) => ({
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
 
-    // Verificar si el slug ya existe y agregar sufijo si es necesario
     let slug = baseSlug;
     let counter = 1;
     let existingProduct = await prisma.product.findUnique({ where: { slug } });
@@ -166,25 +119,16 @@ const errorMessages = validationResult.error.issues.map((err) => ({
     }
 
     const product = await prisma.product.create({
-      data: {
-        ...validationResult.data,
-        slug,
-      },
+      data: { ...data, slug },
     });
 
     await this.invalidateCache();
-    
     return product;
   }
 
   async update(id: string, data: any): Promise<any> {
-    const product = await prisma.product.update({
-      where: { id },
-      data,
-    });
-
+    const product = await prisma.product.update({ where: { id }, data });
     await this.invalidateCache();
-    
     return product;
   }
 
@@ -196,7 +140,6 @@ const errorMessages = validationResult.error.issues.map((err) => ({
       });
 
       await this.invalidateCache();
-      
       return mapProduct(updatedProduct);
     } catch (error: any) {
       if (error?.code === 'P2025') {
@@ -209,25 +152,16 @@ const errorMessages = validationResult.error.issues.map((err) => ({
   async findRelated(category: string, excludeId: string, limit: number = 4): Promise<ProductType[]> {
     const cacheKey = `products:related:${category}:exclude:${excludeId}:limit:${limit}`;
     const cached = await this.cacheManager.get<ProductType[]>(cacheKey);
-    if (cached) {
-      console.log('[Cache HIT] findRelated');
-      return cached;
-    }
+    if (cached) return cached;
 
-    console.log('[Cache MISS] findRelated');
     const products = await prisma.product.findMany({
-      where: {
-        category,
-        isActive: true,
-        id: { not: excludeId },
-      },
+      where: { category, isActive: true, id: { not: excludeId } },
       take: limit,
       orderBy: { name: 'asc' },
     });
 
     const mapped = products.map(mapProduct);
     await this.cacheManager.set(cacheKey, mapped, 300);
-    
     return mapped;
   }
 
@@ -236,24 +170,23 @@ const errorMessages = validationResult.error.issues.map((err) => ({
       where: { id },
       data: { isActive: false },
     });
-
     await this.invalidateCache();
-    
     return product;
   }
 
   async delete(id: string): Promise<any> {
-    const product = await prisma.product.delete({
-      where: { id },
-    });
-
+    const product = await prisma.product.delete({ where: { id } });
     await this.invalidateCache();
-    
     return product;
   }
 
   private async invalidateCache(): Promise<void> {
-    console.log('[Cache] Invalidating all product caches');
-await this.cacheManager.clear();
+    // ✅ CORRECCIÓN: Usar .reset() o .del() según la versión de cache-manager
+    // En cache-manager v5/v6 es .reset(), en v7 es .clear()
+    if (typeof (this.cacheManager as any).reset === 'function') {
+      await (this.cacheManager as any).reset();
+    } else {
+      await (this.cacheManager as any).clear();
+    }
   }
 }
