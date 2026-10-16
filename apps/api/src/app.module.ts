@@ -18,10 +18,8 @@ import { ProductsImportModule } from './products/products-import.module';
       autoSchemaFile: join(process.cwd(), 'schema.gql'),
       sortSchema: true,
       playground: true,
-      cors: {
-        origin: '*',
-        credentials: true,
-      },
+      // ❌ REMOVIDO: cors no es una propiedad de ApolloDriverConfig
+      // ✅ CORS se configura en main.ts con app.enableCors()
     }),
 
     // Configuración de Cache con Redis
