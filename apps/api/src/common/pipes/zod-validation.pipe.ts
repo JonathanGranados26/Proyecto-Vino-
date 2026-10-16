@@ -1,11 +1,6 @@
 import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
 import { ZodSchema, ZodError } from 'zod';
 
-/**
- * Pipe genérico para validar inputs con Zod
- * Decision: Creamos un pipe reutilizable en lugar de validar en cada resolver
- * Trade-off: Agrega una capa de abstracción pero mejora la consistencia
- */
 @Injectable()
 export class ZodValidationPipe implements PipeTransform {
   constructor(private schema: ZodSchema) {}
@@ -15,7 +10,8 @@ export class ZodValidationPipe implements PipeTransform {
       return this.schema.parse(value);
     } catch (error) {
       if (error instanceof ZodError) {
-        const errorMessages = error.errors.map((err) => ({
+        // Zod v4 usa 'issues' en lugar de 'errors'
+        const errorMessages = error.issues.map((err) => ({
           field: err.path.join('.'),
           message: err.message,
         }));

@@ -1,36 +1,33 @@
-import { InputType, Field, Float, ID } from '@nestjs/graphql';
+import { InputType, Field, Float, Int } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateProductInput {
-  @Field(() => ID)
-  id: string;
+export class CreateProductInput {
+  @Field()
+  name: string;
 
-  @Field({ nullable: true })
-  name?: string;
+  @Field()
+  brand: string;
 
-  @Field({ nullable: true })
-  brand?: string;
-
-  @Field({ nullable: true })
-  category?: string;
+  @Field()
+  category: string;
 
   @Field({ nullable: true })
   description?: string;
 
-  @Field({ nullable: true })
-  presentation?: string;
+  @Field()
+  presentation: string;
 
-  @Field(() => Float, { nullable: true })
-  alcoholicDegree?: number;
+  @Field(() => Float)
+  alcoholicDegree: number;
 
-  @Field(() => Float, { nullable: true })
-  price?: number;
+  @Field(() => Float)
+  price: number;
 
-  @Field({ nullable: true })
-  currency?: string;
+  @Field()
+  currency: string;
 
-  @Field({ nullable: true })
-  stock?: number;
+  @Field(() => Int)
+  stock: number;
 
   @Field({ nullable: true })
   country?: string;
@@ -39,13 +36,22 @@ export class UpdateProductInput {
   region?: string;
 
   @Field({ nullable: true })
+  grape?: string;
+
+  @Field(() => Int, { nullable: true })
+  vintage?: number;
+
+  @Field(() => Float, { nullable: true })
+  score?: number;
+
+  @Field({ nullable: true })
+  pairing?: string;
+
+  @Field({ nullable: true })
   imageUrl?: string;
 
   @Field(() => [String], { nullable: true })
-  images?: string[];  // ← NUEVO
-
-  @Field({ nullable: true })
-  isActive?: boolean;
+  images?: string[];
 
   @Field(() => [String], { nullable: true })
   tastingNotes?: string[];
