@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException, Inject } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { PrismaClient, Product as PrismaProduct } from '@prisma/client';
 import { ProductType } from './dto/product.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
